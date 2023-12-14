@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 属性：用于指定当前的映射文件和哪个接口进行映射， 需要指定接口的文件路径， 需要标注包的完整路径接口-->
+<mapper namespace="com.iecube.pptxsplit.model.pptxsplit.mapper.PPTMapper">
+
+    <resultMap id="PDF" type="com.iecube.pptxsplit.model.pptxsplit.entity.Pdf">
+        <result column="ppt_id" property="pptId"></result>
+        <result column="origin_filename" property="originFilename"></result>
+        <result column="file_type" property="fileType"></result>
+    </resultMap>
+
+    <resultMap id="PPT" type="com.iecube.pptxsplit.model.pptxsplit.entity.Ppt">
+        <result column="course_id" property="courseId"></result>
+        <result column="origin_filename" property="originFilename"></result>
+        <result column="file_type" property="fileType"></result>
+    </resultMap>
+
+    <resultMap id="PPTSplitDto" type="com.iecube.pptxsplit.model.pptxsplit.dto.PPTSplitDto">
+        <result column="pdf_id" property="pdfId"></result>
+        <result column="ppt_id" property="pptId"></result>
+        <result column="course_id" property="courseId"></result>
+        <result column="pdf_filename" property="pdfFilename"></result>
+        <result column="ppt_filename" property="pptFilename"></result>
+    </resultMap>
+
+    <insert id="insertPPT" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ppt (id, course_id, filename, origin_filename, file_type)
+        VALUES (NULL, #{courseId}, #{filename}, #{originFilename}, #{fileType} )
+    </insert>
+
+    <insert id="insertPDF" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO pdf (id, ppt_id, filename, origin_filename, file_type)
+        VALUES (NULL, #{pptId}, #{filename}, #{originFilename}, #{fileType} )
+    </insert>
+
+    <select id="getPPTSplitDtoByPdfId" resultMap="PPTSplitDto">
+        SELECT pdf.id AS pdf_id, pdf.ppt_id AS ppt_id, course.id AS course_id, pdf.filename AS pdf_filename, ppt.filename AS ppt_filename
+        FROM pdf INNER JOIN ppt ON pdf.ppt_id=ppt.id INNER JOIN course ON ppt.course_id=course.id
+        WHERE pdf.id=#{pdfId}
+    </select>
+
+    <select id="coursePPTs" resultMap="PPT">
+        SELECT * FROM ppt WHERE course_id=#{courseId}
+    </select>
+
+    <select id="getById" resultMap="PPT">
+        SELECT * FROM ppt WHERE id=#{pptId}
+    </select>
+</mapper>

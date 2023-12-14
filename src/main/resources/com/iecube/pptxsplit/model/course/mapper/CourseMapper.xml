@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 属性：用于指定当前的映射文件和哪个接口进行映射， 需要指定接口的文件路径， 需要标注包的完整路径接口-->
+<mapper namespace="com.iecube.pptxsplit.model.course.mapper.CourseMapper">
+
+    <resultMap id="course" type="com.iecube.pptxsplit.model.course.entity.Course">
+
+    </resultMap>
+
+    <insert id="addCourse" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO course (id, name) VALUES (NULL, #{name})
+    </insert>
+
+    <select id="allCourse" resultMap="course">
+        SELECT * FROM course
+    </select>
+
+
+</mapper>

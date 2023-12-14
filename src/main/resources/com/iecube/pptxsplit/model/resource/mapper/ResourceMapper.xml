@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 属性：用于指定当前的映射文件和哪个接口进行映射， 需要指定接口的文件路径， 需要标注包的完整路径接口-->
+<mapper namespace="com.iecube.pptxsplit.model.resource.mapper.ResourceMapper">
+
+    <resultMap id="Resource" type="com.iecube.pptxsplit.model.resource.entity.Resource">
+        <result column="ppt_id" property="pptId"></result>
+        <result column="origin_filename" property="originFilename"></result>
+        <result column="file_type" property="fileType"></result>
+        <result column="page_width" property="pageWidth"></result>
+        <result column="page_height" property="pageHeight"></result>
+    </resultMap>
+
+
+    <resultMap id="ResourceVo" type="com.iecube.pptxsplit.model.resource.vo.ResourceVo">
+        <result column="course_id" property="courseId"></result>
+        <result column="ppt_id" property="pptId"></result>
+        <result column="origin_filename" property="originFilename"></result>
+    </resultMap>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO resource (id, ppt_id, page, filename,origin_filename, type, file_type, page_width, page_height,x,y,width,height)
+        VALUES (NULL, #{pptId},#{page}, #{filename}, #{originFilename},#{type}, #{fileType},#{pageWidth}, #{pageHeight}, #{x}, #{y}, #{width},#{height})
+    </insert>
+
+    <select id="getResourceListByPPT" resultMap="Resource">
+        SELECT * FROM `resource` WHERE ppt_id=#{pptId} ORDER BY page,filename
+    </select>
+
+    <select id="getResourceVoById" resultMap="ResourceVo">
+        SELECT ppt.course_id, resource.ppt_id, resource.filename,resource.origin_filename
+        FROM resource INNER JOIN ppt ON resource.ppt_id=ppt.id WHERE resource.id=#{resourceId}
+    </select>
+    
+    <select id="getResourceVoByFilename" resultMap="ResourceVo">
+        SELECT ppt.course_id, resource.ppt_id, resource.filename, resource.origin_filename
+        FROM resource INNER JOIN ppt ON resource.ppt_id=ppt.id WHERE resource.filename=#{filename}
+    </select>
+
+</mapper>
